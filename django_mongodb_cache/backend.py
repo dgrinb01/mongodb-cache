@@ -1,6 +1,8 @@
 import time
 from django.core.cache.backends.db import BaseDatabaseCache
 from django.db import connections, router
+from django.conf import settings
+
 try:
     import cPickle as pickle
 except ImportError:
@@ -15,6 +17,16 @@ class MongoDBCache(BaseDatabaseCache):
             raise ValueError("Cache keys must not contain '.' or '$' "
                              "if using MongoDB cache backend")
         super(MongoDBCache, self).validate_key(key)
+
+    def make_key(self, key, version):
+        # 1. replace . and $ from keys, as these are not allowed by mongo
+        # 2. Add site id to the key
+        key = re.sub('\.|\$', '_', key)
+        if settings.SITE_ID:
+            key = key + '_' + settings.SITE_ID
+
+        return super(MongoDBCache, self).make_key(key, version)
+
 
     def get(self, key, default=None, version=None, raw=False, raw_key=False):
         if not raw_key:

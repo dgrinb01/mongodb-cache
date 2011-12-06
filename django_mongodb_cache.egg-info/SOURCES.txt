@@ -1,0 +1,8 @@
+setup.py
+django_mongodb_cache/__init__.py
+django_mongodb_cache/backend.py
+django_mongodb_cache.egg-info/PKG-INFO
+django_mongodb_cache.egg-info/SOURCES.txt
+django_mongodb_cache.egg-info/dependency_links.txt
+django_mongodb_cache.egg-info/requires.txt
+django_mongodb_cache.egg-info/top_level.txt
