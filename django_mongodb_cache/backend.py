@@ -10,6 +10,7 @@ except ImportError:
 
 import pymongo
 import bson
+import re
 
 class MongoDBCache(BaseDatabaseCache):
     def validate_key(self, key):
