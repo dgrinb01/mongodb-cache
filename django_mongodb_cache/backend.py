@@ -12,6 +12,10 @@ import pymongo
 import bson
 import re
 
+import logging
+logger = logging.getLogger('cache')
+
+
 class MongoDBCache(BaseDatabaseCache):
     def validate_key(self, key):
         if '.' in key or '$' in key:
@@ -24,7 +28,7 @@ class MongoDBCache(BaseDatabaseCache):
         # 2. Add site id to the key
         key = re.sub('\.|\$', '_', key)
         if settings.SITE_ID:
-            key = key + '_' + settings.SITE_ID
+            key = key + '_' + str(settings.SITE_ID)
 
         return super(MongoDBCache, self).make_key(key, version)
 
@@ -33,6 +37,8 @@ class MongoDBCache(BaseDatabaseCache):
         if not raw_key:
             key = self.make_key(key, version=version)
         self.validate_key(key)
+
+        logger.debug(key)
 
         collection = self._collection_for_read()
         document = collection.find_one({'_id' : key})
